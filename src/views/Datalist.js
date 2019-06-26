@@ -28,10 +28,11 @@ export default {
         }
     },
     methods: {
-       
+    //    分页-每页显示条数
         handleSizeChange(vel) {
             this.queryinfo.pagesize = vel
         },
+        // 更新分页数据
         handleCurrentChange(vel) {
             this.queryinfo.pagenum = vel
         }

@@ -28,6 +28,7 @@ export default {
 
             // 定义表单数据
             addform: {
+                id:'',
                 goods_name: '',
                 goods_price: '',
                 goods_weight: '',
@@ -80,13 +81,19 @@ export default {
         this.catlist = res.data
     },
     methods: {
-        // 上传文件
+        // 商品内容添加图片
         addupload (file, insert) {
-            console.log(file)
-            insert('https://avatars0.githubusercontent.com/u/11366654?s=460&v=4', 'center')
+            let reader = new FileReader()
+            console.log(reader)
+            reader.onloadend= (e)=>{
+                insert(e.target.result, 'center')
+            }
+            // 加载图片
+            reader.readAsDataURL(file)
           },
+        //   商品图片上传
         uploadsuccess(response, file, fileList) {
-            console.log(response, file, fileList)
+            // console.log(response, file, fileList)
             if (response.meta.status != 200) {
                 setTimeout(() => {
                     fileList.splice(fileList.findIndex(v => v.uid = file.uid), 1)
@@ -95,6 +102,7 @@ export default {
                 return this.$message.error('上传失败')
             }
         },
+        // 获取商品属性与参数
         async handleChange(lve) {
             // console.log(lve)
             let id = lve[lve.length - 1]
@@ -105,7 +113,7 @@ export default {
                     sel: 'only'
                 }
             })
-            console.log(attrData)
+            // console.log(attrData)
             if (attrData.data.meta.status != 200) return this.$message.error('获取属性失败')
             this.goodsattrs = attrData.data.data
 
@@ -115,7 +123,7 @@ export default {
                     sel: 'many'
                 }
             })
-            console.log(goodsparam)
+            // console.log(goodsparam)
             if (goodsparam.data.meta.status != 200) return this.$message.error('获取商品参数失败')
             this.goodsparam = goodsparam.data.data
         },
@@ -139,7 +147,7 @@ export default {
                     //goods-cat和三级联动绑定的,默认是数组,用join转化为以','隔开的字符串
                     this.addform.goods_cat = this.addform.goods_cat.join(',')
                     const res = await this.axios.post('/goods', this.addform)
-                    console.log(res)
+                    // console.log(res)
                     if (res.data.meta.status != 201) return this.$message.error('添加商品失败')
 
                     this.getData()
@@ -148,6 +156,29 @@ export default {
                     this.addclickform = false
                 }
             })
+        },
+        
+        // 删除商品
+        del(id){
+            console.log(id)
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(async () => {
+                 const res = await this.axios.delete('/goods/'+id)
+                 console.log(res)
+                 if(res.data.meta.status!=200) {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                      });
+                 }
+                 this.getData()
+                
+              }).catch(() => {
+                this.$message.error('删除失败,原因:'+res.data.meta.msg)
+              });
         },
         handleSizeChange(vel) {
             this.queryinfo.pagesize = vel

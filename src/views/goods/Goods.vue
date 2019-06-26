@@ -24,29 +24,29 @@
       </el-row>
       <el-table :data="datalist" border style="width: 100%">
         <el-table-column type="index"></el-table-column>
-        <el-table-column prop="goods_name" label="商品名称" width="500"></el-table-column>
+        <el-table-column prop="goods_name" label="商品名称" width="400"></el-table-column>
         <el-table-column prop="goods_price" label="商品价格(元)"></el-table-column>
         <el-table-column prop="goods_weight" label="商品重量"></el-table-column>
         <el-table-column prop="add_time" label="创建时间"></el-table-column>
 
         <el-table-column prop="address" label="操作">
-          <!-- <template slot-scope="data">
+          <template slot-scope="data">
             <el-button
               size="mini"
               type="primary"
-              @click="edituserform(data.row)"
+              @click="editgoods(data.row)"
               icon="el-icon-edit"
               circle
             ></el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="del(data.row.id)"
+              @click="del(data.row.goods_id)"
               icon="el-icon-delete"
               circle
             ></el-button>
            
-          </template>-->
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination
